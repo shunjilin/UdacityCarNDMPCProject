@@ -111,9 +111,6 @@ public:
 //
 // MPC class definition implementation.
 //
-//MPC::MPC() {}
-//MPC::~MPC() {}
-
 // TODO: Set the number of model variables (includes both states and inputs).
 // For example: If the state is a 4 element vector, the actuators is a 2
 // element vector and there are 10 timesteps. The number of variables is:

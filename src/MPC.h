@@ -22,9 +22,6 @@ const size_t n_actuator_vars = 2; // acceleration and steer
 class MPC {
  public:
     const double Lf = ::Lf;
-    //MPC();
-
-//  virtual ~MPC();
 
   // Solve the model given an initial state and polynomial coefficients.
   // Return the first actuations.
