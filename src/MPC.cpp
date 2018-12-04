@@ -6,12 +6,12 @@
 using CppAD::AD;
 using namespace std;
 // TODO: Set the timestep length and duration
-size_t const N = 10;
-double const dt = 0.1;
+size_t const N = 15;
+double const dt = 0.05;
 
 double const ref_cte = 0;
 double const ref_epsi = 0;
-double const ref_v = 50;
+double const ref_v = 100;
 
 // vars is a flat array
 // below are the indexes of each var for timestep 0
@@ -47,15 +47,15 @@ public:
 
         // The part of the cost based on the reference state.
         for (int t = 0; t < N; t++) {
-            fg[0] += 2000* CppAD::pow(vars[cte_start + t] - ref_cte, 2);
-            fg[0] += 2000* CppAD::pow(vars[epsi_start + t] - ref_epsi, 2);
+            fg[0] += 2500* CppAD::pow(vars[cte_start + t] - ref_cte, 2);
+            fg[0] += 2500* CppAD::pow(vars[epsi_start + t] - ref_epsi, 2);
             fg[0] += CppAD::pow(vars[v_start + t] - ref_v, 2);
         }
 
         // Minimize the use of actuators.
         for (int t = 0; t < N - 1; t++) {
-            fg[0] += 5*CppAD::pow(vars[delta_start + t], 2);
-            fg[0] += 5*CppAD::pow(vars[a_start + t], 2);
+            fg[0] += 100*CppAD::pow(vars[delta_start + t], 2);
+            fg[0] += 100*CppAD::pow(vars[a_start + t], 2);
         }
 
         // Minimize the value gap between sequential actuations.
@@ -122,7 +122,7 @@ public:
 // model variables and constraints
 size_t const n_vars = n_state_vars * N + n_actuator_vars * (N-1);
 size_t const n_constraints = n_state_vars * N;
-double const  delta_bound_abs = 0.436332*Lf; // 25 in radians
+double const  delta_bound_abs = 0.436332*Lf; // 25 degrees in radians
 double const bound_abs = 1.0e19;
 double const a_bound_abs = 1.0;
 

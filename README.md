@@ -2,6 +2,68 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+## Model Predictive Control
+In this project we use a model predictive control (MPC) to predict actuator inputs
+for a car. The MPC is given a trajectory at each time step, and by tuning a set of
+constraints and cost parameters, we output the actuator inputs that minimizes this
+optimization problem.
+
+## The Model
+The state has 6 independent variables, the x coordinate, y coordinate, orientation (psi),
+velocity, cross track error (cte) and orientation error (epsi),
+and their update equations are as follows:
+
+* x_t+1 = x_t + v_t * cos(psi_t) * dt
+* y_t+1 = y_t + v_t * sin(psi_t) * dt
+* psi_t+1 = psi_t + v_t / L_f * delta_t * dt
+* v_t+1 = v_t + a_t * dt
+* cte_t+1 = cte_t + v_t * sin(epsi_t) * dt
+* epsi_t+1 = epsi_t + v_t / L_f * delta_t * dt
+
+where delta is the steer angle, and L_f is a constant measuring the distance between
+the center of mass of the vehicle and its front axle. The larger L_f, the slower the
+turn rate.
+
+We constrain the outputs (steer and throttle) with the following ranges:
+* delta [-25 * L_f, 25 * L_f] (which translates to a maximum of 25 degree turns)
+* a [-1, 1]
+
+For the costs, I applied a larger penalty to cte and epsi errors, by a factor
+
+of 2500, while also penalizing deviation from a reference velocity of 100 mph.
+Large actuator values was also penalized, by a factor of 100.
+
+Finally large differences in sequential actuator values were penalized, by a
+factor of 200 for delta (steer) and 10 for a (throttle).
+
+## Receding Horizon
+A calculation is performed at every time step, and the output trajectory is defined
+over a defined number of timesteps (N) of defined duration (dt) which can be tuned.
+Ideally, N would be large and dt small, so we can have a more continuous trajectory.
+The time horizon, given by N * t, should be tuned to not be too short which results
+in myopic trajectories but not too long so as not to be too computationally expensive.
+
+I used an N value of 15 and a dt value of 0.05 which gives a time horizon of 0.75s.
+This gave a trajectory that was close to the waypoint trajectory.
+Initially I used the recommended value of N=10 and dt=0.1 which gives a time horizon
+of 1s, but the large dt resulted in not so accurate trajectories.
+
+## MPC Preprocessing
+MPC preprocessing is done by transforming the waypoints to the car coordinate systems
+
+## Polynomial Fitting
+A degree 3 polynomial is used to fit the waypoints, and this polynomial is then fed
+into the solver to obtain our actuator inputs, as well as the calculated trajectory
+of our receding horizon
+
+## Handling Latency
+There is latency when we actuate the car with the MPC's output, as time is needed to
+perform the calculations. This results in the actuators being applied at a later
+timestep then the timestep it was optimized for. To mitigate this latency, we do not
+use the actual state calculated at the timestep, but a simulated state after a delay
+of 100ms to give as input to the solver.
+
+
 
 ## Dependencies
 

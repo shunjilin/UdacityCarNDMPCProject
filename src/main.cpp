@@ -1,3 +1,4 @@
+
 #include "json.hpp"
 #include <math.h>
 #include <uWS/uWS.h>
@@ -101,6 +102,7 @@ int main() {
           *
           */
 
+          // preprocess waypoints to fit car coordinate system
           for (int i = 0; i < ptsx.size(); i++)
           {
               // shift car reference angle to 90 degrees
