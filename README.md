@@ -28,8 +28,7 @@ We constrain the outputs (steer and throttle) with the following ranges:
 * delta [-25 * L_f, 25 * L_f] (which translates to a maximum of 25 degree turns)
 * a [-1, 1]
 
-For the costs, I applied a larger penalty to cte and epsi errors, by a factor
-
+For the costs, we applied a larger penalty to cte and epsi errors, by a factor
 of 2500, while also penalizing deviation from a reference velocity of 100 mph.
 Large actuator values was also penalized, by a factor of 100.
 
@@ -43,9 +42,9 @@ Ideally, N would be large and dt small, so we can have a more continuous traject
 The time horizon, given by N * t, should be tuned to not be too short which results
 in myopic trajectories but not too long so as not to be too computationally expensive.
 
-I used an N value of 15 and a dt value of 0.05 which gives a time horizon of 0.75s.
+We used an N value of 15 and a dt value of 0.05 which gives a time horizon of 0.75s.
 This gave a trajectory that was close to the waypoint trajectory.
-Initially I used the recommended value of N=10 and dt=0.1 which gives a time horizon
+Initially we used the recommended value of N=10 and dt=0.1 which gives a time horizon
 of 1s, but the large dt resulted in not so accurate trajectories.
 
 ## MPC Preprocessing
@@ -54,7 +53,7 @@ MPC preprocessing is done by transforming the waypoints to the car coordinate sy
 ## Polynomial Fitting
 A degree 3 polynomial is used to fit the waypoints, and this polynomial is then fed
 into the solver to obtain our actuator inputs, as well as the calculated trajectory
-of our receding horizon
+of our receding horizon.
 
 ## Handling Latency
 There is latency when we actuate the car with the MPC's output, as time is needed to
