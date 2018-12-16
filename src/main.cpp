@@ -134,7 +134,7 @@ int main() {
           double psi_sim = -(v * steer_value * latency / mpc.Lf);
           double v_sim = v + throttle_value * latency;
           double cte_sim = cte + (v * sin(epsi) * latency);
-          double epsi_sim = epsi - (v * atan(coeffs[1]) * latency / mpc.Lf);
+          double epsi_sim = epsi - (v * steer_value * latency / mpc.Lf);
 
           // Make a state vector
           Eigen::VectorXd state(n_state_vars);
